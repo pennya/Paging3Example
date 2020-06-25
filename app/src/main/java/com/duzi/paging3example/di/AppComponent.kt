@@ -1,7 +1,7 @@
 package com.duzi.paging3example.di
 
 import com.duzi.paging3example.MainApplication
-import com.duzi.paging3example.api.GithubRemoteDataModule
+import com.duzi.paging3example.api.GithubRepositoryModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjector
@@ -13,7 +13,7 @@ import javax.inject.Singleton
     modules = [
         AndroidSupportInjectionModule::class,
         AppModule::class,
-        GithubRemoteDataModule::class,
+        GithubRepositoryModule::class,
         ViewModelModule::class,
         ActivityBindingModule::class
     ]

@@ -1,7 +1,7 @@
 package com.duzi.paging3example.data
 
 import androidx.paging.PagingSource
-import com.duzi.paging3example.api.GithubService
+import com.duzi.paging3example.api.GithubDataSource
 import com.duzi.paging3example.api.IN_QUALIFIER
 import com.duzi.paging3example.model.Repo
 
@@ -9,7 +9,7 @@ import com.duzi.paging3example.model.Repo
 private const val GITHUB_STARTING_PAGE_INDEX = 1
 
 class GithubPagingSource(
-    private val service: GithubService,
+    private val service: GithubDataSource,
     private val query: String
 ): PagingSource<Int, Repo>() {
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Repo> {

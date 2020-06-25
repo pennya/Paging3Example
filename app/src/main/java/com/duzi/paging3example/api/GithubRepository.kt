@@ -1,17 +1,11 @@
 package com.duzi.paging3example.api
 
-import javax.inject.Inject
+import androidx.paging.PagingData
+import com.duzi.paging3example.model.Repo
+import kotlinx.coroutines.flow.Flow
 
-class GithubRepository @Inject constructor(
-    private val remoteDataSource: GithubRemoteDataSource
-): GithubDataSource {
+interface GithubRepository {
 
-    override suspend fun searchRepos(
-        query: String,
-        page: Int,
-        itemsPerPage: Int
-    ): RepoSearchResponse {
-        return remoteDataSource.searchRepos(query, page, itemsPerPage)
-    }
+    suspend fun getSearchResultStream(query: String): Flow<PagingData<Repo>>
 
 }
