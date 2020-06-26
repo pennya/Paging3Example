@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface GithubRepository {
 
-    suspend fun getSearchResultStream(query: String): Flow<PagingData<Repo>>
+    fun getSearchResultStream(query: String): Flow<PagingData<Repo>>
 
 }

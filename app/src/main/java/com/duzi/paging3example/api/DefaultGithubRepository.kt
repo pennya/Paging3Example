@@ -12,7 +12,7 @@ class DefaultGithubRepository @Inject constructor(
     private val remoteDataSource: GithubRemoteDataSource
 ): GithubRepository {
 
-    override suspend fun getSearchResultStream(query: String): Flow<PagingData<Repo>> {
+    override fun getSearchResultStream(query: String): Flow<PagingData<Repo>> {
         return Pager(
             config = PagingConfig(pageSize = NETWORK_PAGE_SIZE),
             pagingSourceFactory = { GithubPagingSource(remoteDataSource, query) }

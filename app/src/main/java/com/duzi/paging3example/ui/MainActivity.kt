@@ -7,16 +7,19 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
 import androidx.recyclerview.widget.DividerItemDecoration
 import com.duzi.paging3example.R
 import com.duzi.paging3example.databinding.ActivityMainBinding
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 class MainActivity : DaggerAppCompatActivity() {
 
     @Inject
@@ -24,7 +27,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
     private val mainViewModel by viewModels<MainViewModel> { viewModelFactory }
 
-    private val adapter = ReposAdapter()
+    private val reposAdapter = ReposAdapter()
 
     private var searchJob: Job? = null
 
@@ -39,7 +42,7 @@ class MainActivity : DaggerAppCompatActivity() {
             vm = mainViewModel
             list.apply {
                 addItemDecoration(decoration)
-                adapter = this.adapter
+                adapter = reposAdapter
             }
         }
 
@@ -53,7 +56,7 @@ class MainActivity : DaggerAppCompatActivity() {
         searchJob?.cancel()
         searchJob = lifecycleScope.launch {
             mainViewModel.searchRepos(query).collectLatest {
-                adapter.submitData(it)
+                reposAdapter.submitData(it)
             }
         }
     }
@@ -77,12 +80,18 @@ class MainActivity : DaggerAppCompatActivity() {
                 false
             }
         }
+
+        lifecycleScope.launch {
+            @OptIn(ExperimentalPagingApi::class)
+            reposAdapter.dataRefreshFlow.collect {
+                binding.list.scrollToPosition(0)
+            }
+        }
     }
 
     private fun updateRepoListFromInput() {
         binding.searchRepo.text.trim().let {
             if (it.isNotEmpty()) {
-                binding.list.scrollToPosition(0)
                 search(it.toString())
             }
         }
